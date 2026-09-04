@@ -1,0 +1,148 @@
+# Área administrativa do site OAB Rio Claro (Decap CMS)
+#
+# Em produção: backend GitHub — cada edição salva vira um commit e o site
+# republica sozinho em ~1 minuto (Cloudflare Pages).
+# Em desenvolvimento local: rode `npm run cms` e acesse /admin/ (local_backend).
+
+backend:
+  name: test-repo
+
+media_folder: "src/assets/img/uploads"
+public_folder: "/assets/img/uploads"
+
+site_url: https://www.oabrioclaro.org.br
+logo_url: /oab-rioclaro-preview/assets/img/logo-oab.png
+
+collections:
+  - name: noticias
+    label: "📰 Notícias"
+    label_singular: "Notícia"
+    folder: "src/noticias"
+    create: true
+    delete: true
+    sort_by: ["date"]
+    summary: "{{title}} — {{date | date('DD/MM/YYYY')}}"
+    fields:
+      - { name: title, label: "Título", widget: string }
+      - { name: date, label: "Data de publicação", widget: datetime, format: "YYYY-MM-DD", date_format: "DD/MM/YYYY", time_format: false }
+      - name: categoria
+        label: "Categoria"
+        widget: select
+        options: ["Notícias", "Eventos", "Palestras", "Artigos", "Saiu na mídia", "TV OAB Rio Claro"]
+        default: "Notícias"
+      - { name: capa, label: "Imagem de capa", widget: image, required: false, hint: "Proporção ideal 16:9 (ex.: 1280×720)" }
+      - { name: resumo, label: "Resumo (aparece no card)", widget: text, hint: "1 a 2 frases" }
+      - { name: autor, label: "Autor/setor", widget: string, required: false, default: "Comunicação OAB Rio Claro" }
+      - { name: body, label: "Texto da notícia", widget: markdown }
+
+  - name: convenios
+    label: "🤝 Convênios 60+"
+    label_singular: "Parceiro"
+    folder: "src/convenios"
+    create: true
+    delete: true
+    summary: "{{title}} ({{categoria}})"
+    fields:
+      - { name: title, label: "Nome do parceiro", widget: string }
+      - { name: sigla, label: "Sigla (2 letras para o avatar)", widget: string, pattern: ["^.{1,3}$", "Use 1 a 3 letras"] }
+      - { name: cor, label: "Cor do avatar", widget: color, default: "#16324f" }
+      - name: categoria
+        label: "Categoria"
+        widget: select
+        options: ["Saúde", "Estética e Bem-estar", "Serviços"]
+      - { name: subcategoria, label: "Subcategoria (opcional)", widget: string, required: false, hint: "Ex.: Farmácia, Terapias, Atividade física" }
+      - { name: resumo, label: "Descrição curta", widget: text }
+      - { name: beneficio, label: "Benefício (selo azul do card)", widget: string, default: "Condição especial conveniada" }
+      - { name: contato, label: "Link de contato (site/WhatsApp)", widget: string, required: false }
+      - { name: permalink, widget: hidden, default: false }
+
+  - name: dados
+    label: "⚙️ Dados do site"
+    files:
+      - name: comissoes
+        label: "⚖️ Comissões e presidências"
+        file: "src/_data/comissoes.json"
+        fields:
+          - name: lista
+            label: "Comissões"
+            label_singular: "Comissão"
+            widget: list
+            summary: "{{fields.nome}} — {{fields.presidente}}"
+            fields:
+              - { name: nome, label: "Nome da comissão", widget: string }
+              - { name: presidente, label: "Presidente", widget: string }
+              - { name: vice, label: "Vice-presidente", widget: string, required: false }
+              - { name: coordenacao, label: "Coordenação", widget: string, required: false }
+
+      - name: eventos
+        label: "📅 Agenda de eventos"
+        file: "src/_data/eventos.json"
+        fields:
+          - name: subsecao
+            label: "Eventos na Subseção"
+            label_singular: "Evento"
+            widget: list
+            summary: "{{fields.dia}}/{{fields.mes}} — {{fields.titulo}}"
+            fields:
+              - { name: dia, label: "Dia (número)", widget: string }
+              - { name: mes, label: "Mês (abreviado: jan, fev…)", widget: string }
+              - { name: titulo, label: "Título", widget: string }
+              - { name: detalhe, label: "Horário e local", widget: string }
+          - name: oabsp
+            label: "Eventos OAB SP / ESA"
+            label_singular: "Evento"
+            widget: list
+            summary: "{{fields.dia}}/{{fields.mes}} — {{fields.titulo}}"
+            fields:
+              - { name: dia, label: "Dia (número)", widget: string }
+              - { name: mes, label: "Mês (abreviado)", widget: string }
+              - { name: titulo, label: "Título", widget: string }
+              - { name: detalhe, label: "Horário e local", widget: string }
+
+      - name: diretoria
+        label: "🏛️ Diretoria"
+        file: "src/_data/diretoria.json"
+        fields:
+          - name: membros
+            label: "Membros"
+            label_singular: "Membro"
+            widget: list
+            summary: "{{fields.cargo}}: {{fields.nome}}"
+            fields:
+              - { name: cargo, label: "Cargo", widget: string }
+              - { name: nome, label: "Nome", widget: string }
+
+      - name: instagram
+        label: "📷 Instagram (miniatura da home)"
+        file: "src/_data/instagram.json"
+        fields:
+          - { name: observacao, label: "Observação interna", widget: string, required: false }
+          - name: posts
+            label: "Posts exibidos na home"
+            label_singular: "Post"
+            widget: list
+            summary: "{{fields.legenda}}"
+            fields:
+              - { name: imagem, label: "Imagem (quadrada)", widget: image }
+              - { name: legenda, label: "Legenda curta", widget: string }
+              - { name: url, label: "Link do post no Instagram", widget: string }
+
+      - name: site
+        label: "🏢 Endereço e contatos"
+        file: "src/_data/site.json"
+        fields:
+          - { name: nome, label: "Nome", widget: string }
+          - { name: subtitulo, label: "Subtítulo", widget: string }
+          - { name: sede, label: "Nome da sede", widget: string }
+          - { name: endereco, label: "Endereço completo", widget: string }
+          - { name: telefone, label: "Telefone", widget: string }
+          - { name: instagram, label: "Link Instagram", widget: string }
+          - { name: facebook, label: "Link Facebook", widget: string }
+          - { name: youtube, label: "Link YouTube", widget: string }
+          - name: mapas
+            label: "Links de mapa (rodapé)"
+            widget: object
+            fields:
+              - { name: google, label: "Google Maps", widget: string }
+              - { name: waze, label: "Waze", widget: string }
+              - { name: apple, label: "Apple Maps", widget: string }

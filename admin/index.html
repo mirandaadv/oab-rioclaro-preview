@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Área Administrativa (demonstração) — OAB Rio Claro</title>
+  <style>
+    body{margin:0;font-family:-apple-system,'Segoe UI',Roboto,Arial,sans-serif;background:#f5f7fa}
+    .gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+    .card{background:#fff;border:1px solid #e2e8ee;border-radius:14px;box-shadow:0 8px 30px rgba(22,50,79,.12);
+      max-width:400px;width:100%;padding:34px 32px;text-align:center}
+    .card img{height:60px;margin-bottom:14px}
+    .card h1{font-family:Georgia,serif;color:#16324f;font-size:21px;margin:0 0 6px}
+    .card p{color:#5a6b76;font-size:13.5px;line-height:1.55;margin:0 0 20px}
+    .card input{width:100%;box-sizing:border-box;border:1px solid #e2e8ee;border-radius:8px;padding:11px 14px;
+      font-size:15px;text-align:center;letter-spacing:.12em;margin-bottom:12px}
+    .card button{width:100%;border:0;border-radius:8px;background:#2f4bd7;color:#fff;font-weight:600;
+      font-size:14.5px;padding:12px;cursor:pointer}
+    .card button:hover{background:#243cb0}
+    .erro{color:#c8102e;font-size:13px;min-height:18px;margin:8px 0 0}
+    .demo-tag{display:inline-block;background:#fdf1dc;color:#b26a00;font-size:11px;font-weight:700;
+      letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:999px;margin-bottom:12px}
+  </style>
+</head>
+<body>
+  <div class="gate" id="gate">
+    <form class="card" id="gform">
+      <img src="/oab-rioclaro-preview/assets/img/logo-oab.png" alt="OAB">
+      <div><span class="demo-tag">Demonstração</span></div>
+      <h1>Área Administrativa</h1>
+      <p>Ambiente de demonstração do painel do novo site da OAB Rio Claro.<br>
+      As alterações feitas aqui <b>não são publicadas</b> — ao recarregar a página, tudo volta ao original.</p>
+      <input type="password" id="codigo" placeholder="Código de acesso" autocomplete="off" autofocus>
+      <button type="submit">Entrar</button>
+      <div class="erro" id="erro"></div>
+    </form>
+  </div>
+  <script src="demo-content.js"></script>
+  <script>
+  (function () {
+    var CODIGO = 'oabrc2026';
+    function carregarPainel() {
+      document.getElementById('gate').style.display = 'none';
+      var s = document.createElement('script');
+      s.src = 'https://unpkg.com/decap-cms@^3.8.4/dist/decap-cms.js';
+      document.body.appendChild(s);
+    }
+    if (sessionStorage.getItem('oabrc-demo') === '1') { carregarPainel(); return; }
+    document.getElementById('gform').addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (document.getElementById('codigo').value.trim() === CODIGO) {
+        try { sessionStorage.setItem('oabrc-demo', '1'); } catch (x) {}
+        carregarPainel();
+      } else {
+        document.getElementById('erro').textContent = 'Código incorreto.';
+      }
+    });
+  })();
+  </script>
+</body>
+</html>
