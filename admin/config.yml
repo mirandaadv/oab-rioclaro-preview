@@ -135,7 +135,10 @@ collections:
           - { name: subtitulo, label: "Subtítulo", widget: string }
           - { name: sede, label: "Nome da sede", widget: string }
           - { name: endereco, label: "Endereço completo", widget: string }
-          - { name: telefone, label: "Telefone", widget: string }
+          - { name: telefone, label: "Telefone (sede)", widget: string }
+          - { name: telefone2, label: "Telefone fixo", widget: string }
+          - { name: whatsapp, label: "Celular/WhatsApp (exibição)", widget: string }
+          - { name: whatsappLink, label: "Link do WhatsApp (wa.me)", widget: string }
           - { name: instagram, label: "Link Instagram", widget: string }
           - { name: facebook, label: "Link Facebook", widget: string }
           - { name: youtube, label: "Link YouTube", widget: string }
